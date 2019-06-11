@@ -18,6 +18,7 @@ call NERDTreeAddMenuItem({
             \ 'callback': 'NERDTreeGrep' })
 
 function! NERDTreeGrep()
+    let curdir = getcwd()
     let dirnode = g:NERDTreeDirNode.GetSelected()
 
     let pattern = input("Enter the search pattern: ")
@@ -36,6 +37,7 @@ function! NERDTreeGrep()
     try
         exec 'silent cd ' . dirnode.path.str()
         exec 'silent grep -rn ' . pattern . ' .'
+        exec 'silent cd ' . curdir
         " exec 'silent grep -rn ' . pattern . ' ' . dirnode.path.str()
     finally
         let &shellpipe = old_shellpipe
