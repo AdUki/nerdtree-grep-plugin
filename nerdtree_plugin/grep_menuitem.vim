@@ -35,10 +35,13 @@ function! NERDTreeGrep()
     let &shellpipe='&>'
 
     try
-        exec 'silent cd ' . dirnode.path.str()
-        exec 'silent grep -rn ' . pattern . ' .'
-        exec 'silent cd ' . curdir
-        " exec 'silent grep -rn ' . pattern . ' ' . dirnode.path.str()
+        if stridx(pattern, '"') == -1
+            exec 'silent grep -Ern "' . pattern . '" ' . dirnode.path.str()
+        elseif stridx(pattern, "'") == -1
+            exec "silent grep -Ern '" . pattern . "' " . dirnode.path.str()
+        else
+            exec 'silent grep -Ern ' . pattern . ' ' . dirnode.path.str()
+        endif
     finally
         let &shellpipe = old_shellpipe
     endtry
